@@ -25,12 +25,8 @@ const float BEND_RESISTANCE = 90000.0;
 
 const float COIN_FLEX = 35000.00;
 
-//VARIABLES
-bool money_in = false;
-
 // SET UP DEVICE
 void setup() {
-  
   myservo.attach(servoinput);
   Serial.begin(9600);
   pinMode(FLEX_PIN, INPUT);
@@ -42,34 +38,26 @@ void setup() {
 
 // THE FLEX SENSOR ANALYSES IF A COIN WAS INSERTED AND RETURNS IF TRUE OR FALSE
 bool coinInserted(){
-  
   int flexADC = analogRead(FLEX_PIN);
   float flexV = flexADC * VCC / 1023.0;
   float flexR = R_DIV * (VCC / flexV - 1.0);
   Serial.println("Resistance: " + String(flexR) + " ohms");
   
-  if (flexR >= COIN_FLEX){
-    money_in = true;
-  } else {
-    money_in = false;
-  }
-  return money_in;
+  // money_in
+  return flexR >= COIN_FLEX
 }
 
 //INITIAL DISPLAY MESSAGE
 void initDisplay(){
-  
   lcd.clear();
   lcd.setCursor(0, 0);
   lcd.print("INTRODUCE 1 EURO");
   lcd.setCursor(0, 1);
   lcd.print("FOR 1 COCA-COLA");
   delay(2000);
-  
 }
 
 void giveCan() {
-
   // PREPARE PRODUCT
   lcd.clear();
   lcd.setCursor(0, 0);
@@ -89,22 +77,15 @@ void giveCan() {
   lcd.setCursor(0, 1);
   lcd.print("YOUR PURCHASE");
   delay(3500);
-  
 }
 
 void loop() {
   
   //RUN PROGRAM
-  while (money_in == false){
+  while (coinInserted() == false){
     initDisplay();
-    money_in == coinInserted();
   }
 
-  if (money_in == true) {
-    giveCan();
-    money_in = false;
-    delay(500);
-  } else {
-  }
-
+  giveCan();
+  delay(500);
 }
