@@ -44,7 +44,7 @@ bool coinInserted(){
   Serial.println("Resistance: " + String(flexR) + " ohms");
   
   // money_in
-  return flexR >= COIN_FLEX
+  return flexR >= COIN_FLEX;
 }
 
 //INITIAL DISPLAY MESSAGE
